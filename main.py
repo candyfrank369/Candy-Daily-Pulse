@@ -66,6 +66,15 @@ TEXT = {
         "total_expense": "总支出",
         "net": "净利",
         "company_total": "公司合计",
+        "goal_title": "\n===== AU$200,000 目标进度 =====",
+        "pre_tax": "税前净利",
+        "after_tax": "税后净利",
+        "distance": "距离目标还差",
+        "days_left": "剩余天数",
+        "daily_needed": "还需日均税后净利",
+        "achieved": "已达成目标!",
+        "fy_over": "财年已结束。",
+        "progress": "进度",
     },
     "en": {
         "menu_title": "\n===== Daily Pulse - Main Menu =====",
@@ -97,6 +106,15 @@ TEXT = {
         "total_expense": "Total expense",
         "net": "Net profit",
         "company_total": "Company total",
+        "goal_title": "\n===== AU$200,000 Goal Progress =====",
+        "pre_tax": "Pre-tax net",
+        "after_tax": "After-tax net",
+        "distance": "Still need",
+        "days_left": "Days left",
+        "daily_needed": "Required after-tax net per day",
+        "achieved": "Goal achieved!",
+        "fy_over": "Financial year is over.",
+        "progress": "Progress",
     },
 }
 
@@ -271,6 +289,61 @@ def show_summary(data, lang):
 
 
 # ----------------------------------------------------------------------
+# Feature: AU$200,000 goal progress
+# ----------------------------------------------------------------------
+
+def make_bar(percent):
+    """Return a 10-character text progress bar like [#####-----]."""
+    # Clamp percent into the 0..100 range so the bar never overflows.
+    p = percent
+    if p < 0:
+        p = 0
+    if p > 100:
+        p = 100
+    filled = int(p / 10)          # how many '#' out of 10
+    return "[" + "#" * filled + "-" * (10 - filled) + "]"
+
+
+def show_goal_progress(data, lang):
+    """Work out how far the company is from the AU$200,000 after-tax goal."""
+    t = TEXT[lang]
+    print(t["goal_title"])
+
+    # Sum income and expense across every record.
+    total_income = 0.0
+    total_expense = 0.0
+    for record in data:
+        if record["type"] == "income":
+            total_income += record["amount"]
+        else:
+            total_expense += record["amount"]
+
+    pre_tax = total_income - total_expense
+    after_tax = pre_tax * (1 - TAX_RATE)
+    distance = GOAL - after_tax
+    percent = after_tax / GOAL * 100
+
+    # Days left until the financial year ends.
+    days_left = (FY_END - date.today()).days
+
+    print("  {}: {:.2f}".format(t["pre_tax"], pre_tax))
+    print("  {}: {:.2f}".format(t["after_tax"], after_tax))
+    print("  {} {:.1f}%".format(t["progress"], percent), make_bar(percent))
+
+    # If we already hit (or passed) the goal, celebrate; otherwise show
+    # how much is left and the daily pace still required.
+    if distance <= 0:
+        print("  " + t["achieved"])
+    else:
+        print("  {}: {:.2f}".format(t["distance"], distance))
+        print("  {}: {}".format(t["days_left"], days_left))
+        if days_left > 0:
+            print("  {}: {:.2f}".format(t["daily_needed"], distance / days_left))
+        else:
+            print("  " + t["fy_over"])
+
+
+# ----------------------------------------------------------------------
 # Main menu loop
 # ----------------------------------------------------------------------
 
@@ -301,6 +374,8 @@ def main():
             show_today(data, lang)
         elif choice == "4":
             show_summary(data, lang)
+        elif choice == "5":
+            show_goal_progress(data, lang)
         elif choice == "6":
             save_data(data)
             print(t["goodbye"])
