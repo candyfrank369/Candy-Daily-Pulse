@@ -17,7 +17,9 @@ from datetime import date
 # ----------------------------------------------------------------------
 
 # Where all records are stored on disk (a JSON file inside data/).
-DATA_FILE = os.path.join("data", "pulse_data.json")
+# __file__ makes the path work even if the user runs Python from another folder.
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+DATA_FILE = os.path.join(BASE_DIR, "data", "pulse_data.json")
 
 # Goal logic settings.
 GOAL = 200000.0          # after-tax net income target (AU$)
@@ -61,6 +63,8 @@ TEXT = {
         "note_prompt": "备注 (可留空,直接回车): ",
         "saved_income": "已记录一笔收入。",
         "saved_expense": "已记录一笔支出。",
+        "record_type_prompt": "请选择记录类型 (1=收入, 2=支出): ",
+        "bad_record_type": "请输入 1 或 2。",
         "summary_title": "\n===== 全部汇总(按业务) =====",
         "total_income": "总收入",
         "total_expense": "总支出",
@@ -101,6 +105,8 @@ TEXT = {
         "note_prompt": "Note (optional, press Enter to skip): ",
         "saved_income": "Income record saved.",
         "saved_expense": "Expense record saved.",
+        "record_type_prompt": "Choose record type (1=income, 2=expense): ",
+        "bad_record_type": "Please enter 1 or 2.",
         "summary_title": "\n===== Full Summary (by business) =====",
         "total_income": "Total income",
         "total_expense": "Total expense",
@@ -133,7 +139,11 @@ def load_data():
     """
     try:
         with open(DATA_FILE, "r", encoding="utf-8") as f:
-            return json.load(f)
+            data = json.load(f)
+            if isinstance(data, list):
+                return data
+            print("Warning: data file should contain a list, starting with empty data.")
+            return []
     except FileNotFoundError:
         # First time running: no file yet, so start fresh.
         return []
@@ -199,13 +209,25 @@ def show_today(data, lang):
 # Feature: add a record (income or expense)
 # ----------------------------------------------------------------------
 
-def add_record(data, lang, kind):
+def add_record(data, lang, kind=None):
     """Ask the user for one income/expense record and append it to data.
 
     'kind' is either "income" or "expense" (decided by the menu).
+    If kind is not given, the function asks the user to choose one.
     Demonstrates: dictionary (the record), try/except (amount input).
     """
     t = TEXT[lang]
+
+    # The menu passes the kind directly. This fallback keeps the function
+    # usable as add_record(data, lang), matching the assignment wording.
+    while kind not in ("income", "expense"):
+        type_choice = input(t["record_type_prompt"]).strip()
+        if type_choice == "1":
+            kind = "income"
+        elif type_choice == "2":
+            kind = "expense"
+        else:
+            print(t["bad_record_type"])
 
     # 1) Choose which business this record belongs to.
     print(t["pick_business"])

@@ -1,5 +1,8 @@
 # Python cache
 __pycache__/
 
+# macOS local file
+.DS_Store
+
 # Local data file (each user keeps their own records)
 data/pulse_data.json

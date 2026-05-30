@@ -1,83 +1,109 @@
-# Candy Daily Pulse
+# Candy Daily Pulse（每日业务脉搏）
 
-A small command-line tool written in pure Python (standard library only), built for my own daily use.
+一个用纯 Python 标准库写的命令行小工具，给我自己每天记录业务收支和年度目标进度。
 
-## 1. What this tool is
+## 一、这个工具是什么
 
-Candy Daily Pulse is a **bilingual (中文 / English) command-line bookkeeping tool** for my company
-**CANDY & FRANK LTD**. It lets me quickly record the daily **income** and **expense** of each business,
-and automatically works out how far the company is from the **AU$200,000 after-tax net income goal for 2026**.
+Candy Daily Pulse 是一个 **中英双语命令行记账工具**，服务于我家公司 **CANDY & FRANK LTD**。
+它可以每天记录 4 块业务的收入和支出，并自动计算公司离 **2026 年 AU$200,000 税后净收入目标**还差多少。
 
-On startup it first asks for a language (`1 = 中文`, `2 = English`); after that, all menus and prompts
-are shown in the chosen language.
+程序启动后会先选择语言：
 
-## 2. The real problem it solves for me
+- `1 = 中文`
+- `2 = English`
 
-My company has **4 real businesses**, each with scattered income and expenses every day, but I never had a
-clear picture in my head, nor any idea whether the AU$200,000 after-tax goal for the year was on track.
-This tool records the daily flow and lets me see, at any moment with a single key:
+选择后，菜单和提示会按所选语言显示。
 
-- The total income, total expense and net profit of each business
-- How far the whole company is from the AU$200,000 goal, how many days are left, and how much net I still need per day
+## 二、它解决我的什么真实问题
 
-The 4 businesses:
+我有 4 块真实业务，每天都有零散收入和支出。如果只靠脑子记，很难知道每块业务是否赚钱，也不知道全年 AU$200,000 税后净收入目标是否能完成。
 
-| Code | 中文名 | English |
+这个工具解决的问题是：
+
+- 每天快速记录每块业务的收入和支出
+- 随时查看今天的收支
+- 按业务查看总收入、总支出、净利
+- 查看公司整体离 AU$200,000 目标还差多少
+- 看到剩余天数和还需要的日均税后净利
+
+4 块业务如下：
+
+| 代号 | 中文名 | English |
 |------|--------|---------|
 | `camp` | 青少年创业营 | Youth Entrepreneurship Camp |
 | `clothing` | 童装店 | Kids Clothing Store |
 | `youtube` | YouTube 频道 | YouTube Channel |
 | `secondhand` | 二手书玩具店 | Secondhand Toy & Book Store |
 
-## 3. How to run
+## 三、怎么运行
+
+在项目文件夹中运行：
 
 ```bash
 python3 main.py
 ```
 
-- Requires **Python 3** (uses `.format()` and the standard library; Python 3.6+ is enough). No third-party packages needed.
-- Data is stored in **`data/pulse_data.json`**. Close and reopen the program and your records are still there — they are loaded back automatically.
-- On the first run there is no data file yet; the tool creates the `data/` folder and the JSON file for you.
+要求：
 
-Main menu options:
+- 需要 Python 3
+- 不需要安装任何第三方库
+- 只使用 Python 标准库：`json`、`os`、`datetime`
+- 数据保存在 `data/pulse_data.json`
+- 程序关闭后再打开，历史记录会自动读回来
 
-1. Add an income record
-2. Add an expense record
-3. View today's records
-4. View full summary (total income, expense and net profit per business)
-5. View AU$200,000 goal progress
-6. Exit
+主菜单功能：
 
-## 4. How the goal progress is calculated
+1. 记一笔收入
+2. 记一笔支出
+3. 查看今天的收支
+4. 查看全部汇总
+5. 查看 AU$200,000 目标进度
+6. 退出
 
-- Total income = sum of all `income` record amounts
-- Total expense = sum of all `expense` record amounts
-- Pre-tax net = total income − total expense
-- After-tax net = pre-tax net × (1 − 0.25)　← 25% tax rate
-- Distance to goal = 200000 − after-tax net
-- Days left = 2026-12-31 − today (computed with `datetime`)
-- Required after-tax net per day = distance ÷ days left (shows "Goal achieved!" once reached)
-- Progress percentage = after-tax net ÷ 200000 × 100, shown with a text progress bar `[#####-----]`
+## 四、目标进度怎么算
 
-## 5. Where the 6 technical elements live (walkthrough cheat sheet)
+计算规则：
 
-> Line numbers refer to `main.py`; if they shift slightly, search by function name instead.
+- 总收入 = 所有 `income` 记录金额之和
+- 总支出 = 所有 `expense` 记录金额之和
+- 税前净利 = 总收入 - 总支出
+- 税后净利 = 税前净利 x (1 - 0.25)
+- 距离目标 = 200000 - 税后净利
+- 剩余天数 = 2026-12-31 - 今天
+- 还需日均税后净利 = 距离目标 / 剩余天数
+- 进度百分比 = 税后净利 / 200000 x 100
 
-| Technical element | Where it lives |
+进度会用简单文字条显示，例如：
+
+```text
+[#####-----] 50.0%
+```
+
+## 五、6 个技术要素在代码哪里
+
+现场讲解时可以按这个表说明：
+
+| 技术要素 | 代码位置 |
 |----------|----------|
-| **1. At least 3 custom functions** | `load_data()`, `save_data(data)`, `add_record(data, lang, kind)`, `show_summary(data, lang)`, `show_goal_progress(data, lang)`, plus `choose_language()`, `show_today()`, `make_bar()`, `main()` |
-| **2. Loop + conditional** | The `while True` main-menu loop in `main()` + `if / elif / else` dispatch; `for` loops over all records to accumulate totals in `show_summary()` and `show_goal_progress()` |
-| **3. Storing data with dictionaries** | Each record is a dict `{"date":..., "type":..., "business":..., "amount":..., "note":...}` (see `add_record()`); the UI text dict `TEXT`; the business config dict `BUSINESSES` |
-| **4. try / except error handling** | In `add_record()`, the amount input uses `try/except ValueError` to catch non-numbers and re-prompt; in `load_data()`, `try/except` handles `FileNotFoundError` and `json.JSONDecodeError` |
-| **5. Saving data to a local JSON file** | `save_data()` writes to `data/pulse_data.json` with `json.dump`; `load_data()` reads it back with `json.load` |
-| **6. Git branch development + merge back to main** | Developed on the `feature/cli-tracker` branch with several commits, then `git merge` back into `main` (see `git log --oneline` and `git branch`) |
+| 1. 至少 3 个自定义函数 | `load_data()`、`save_data(data)`、`add_record(data, lang, kind=None)`、`show_summary(data, lang)`、`show_goal_progress(data, lang)`，另外还有 `choose_language()`、`show_today()`、`make_bar()`、`main()` |
+| 2. 循环 + 条件判断 | `main()` 里的 `while True` 主菜单循环，以及 `if / elif / else` 处理用户选择；`show_summary()` 和 `show_goal_progress()` 里用 `for` 循环遍历记录 |
+| 3. 字典 | 每一笔记录都是字典；`BUSINESSES` 保存 4 块业务；`TEXT` 保存中英文界面文字 |
+| 4. try / except | `load_data()` 处理文件不存在和 JSON 损坏；`add_record()` 处理金额输入不是数字的情况 |
+| 5. JSON 文件读写 | `load_data()` 用 `json.load` 读取 `data/pulse_data.json`；`save_data(data)` 用 `json.dump` 保存 |
+| 6. Git 分支开发 + merge | 在 `feature/cli-tracker` 分支开发并提交，再 merge 回 `main` |
 
-## 6. What a stored record looks like
+## 六、记录的数据长什么样
 
-`data/pulse_data.json` is simply a list of records, each one a dictionary:
+`data/pulse_data.json` 里保存的是一个列表，每一笔记录是一个字典：
 
 ```json
 [
-  {"date": "2026-05-30", "type": "income", "business": "camp", "amount": 500.0, "note": "summer camp signup"}
+  {
+    "date": "2026-05-30",
+    "type": "income",
+    "business": "camp",
+    "amount": 500.0,
+    "note": "夏令营报名"
+  }
 ]
 ```
