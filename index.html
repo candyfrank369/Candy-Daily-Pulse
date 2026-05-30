@@ -4,23 +4,24 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 <title>Candy Daily Pulse · 每日脉动</title>
-<meta name="theme-color" content="#7c3aed" />
+<meta name="theme-color" content="#ff6b6b" />
 <link rel="manifest" href="manifest.json" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 <meta name="apple-mobile-web-app-title" content="Daily Pulse" />
 <style>
   :root{
-    --bg:#0d0620; --bg2:#1a0d3e; --card:#1c1142; --card2:#2a1a5e;
-    --purple:#a855f7; --purple-soft:#c084fc; --neon:#d946ef; --pink:#ec4899;
-    --green:#34d399; --red:#fb7185; --text:#f3eefe; --muted:#a99fce;
-    --line:#392564; --gold:#fbbf24;
+    /* Sunrise Coral · 晨曦珊瑚 — bright, warm, hopeful */
+    --bg:#fff8f3; --bg2:#ffece0; --card:#ffffff; --card2:#fff2ea;
+    --purple:#ff6b6b; --purple-soft:#ff8787; --neon:#ff922b; --pink:#ff8fab;
+    --green:#12b886; --red:#fa5252; --text:#3a2a20; --muted:#9c8579;
+    --line:#ffe3d3; --gold:#f59f00;
   }
   *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
   body{
     margin:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC","Microsoft YaHei",sans-serif;
-    background:radial-gradient(circle at 20% -10%,#2d1065 0%,transparent 55%),
-               radial-gradient(circle at 90% 0%,#4a1078 0%,transparent 45%),
+    background:radial-gradient(circle at 18% -10%,#ffd9c2 0%,transparent 55%),
+               radial-gradient(circle at 92% 0%,#ffd6e0 0%,transparent 48%),
                linear-gradient(165deg,var(--bg),var(--bg2));
     background-attachment:fixed; color:var(--text);
     min-height:100vh; padding-bottom:90px;
@@ -38,11 +39,11 @@
   .greet .quote{font-size:13px; color:var(--muted); margin-top:5px; line-height:1.5;}
 
   /* Countdown banner */
-  .countdown{display:flex; align-items:center; justify-content:center; gap:10px; background:linear-gradient(90deg,rgba(168,85,247,.18),rgba(217,70,239,.18)); border:1px solid var(--line); border-radius:14px; padding:10px 14px; margin-bottom:16px; font-size:14px;}
+  .countdown{display:flex; align-items:center; justify-content:center; gap:10px; background:linear-gradient(90deg,rgba(255,107,107,.14),rgba(255,146,43,.16)); border:1px solid var(--line); border-radius:14px; padding:10px 14px; margin-bottom:16px; font-size:14px;}
   .countdown b{font-size:22px; color:var(--gold); font-weight:800; letter-spacing:.5px;}
   .countdown .fire{font-size:18px;}
 
-  .card{background:var(--card); border:1px solid var(--line); border-radius:18px; padding:18px; margin-bottom:16px; box-shadow:0 8px 30px rgba(60,20,120,.35);}
+  .card{background:var(--card); border:1px solid var(--line); border-radius:18px; padding:18px; margin-bottom:16px; box-shadow:0 8px 28px rgba(255,138,76,.16);}
   .card h2{margin:0 0 14px; font-size:14px; letter-spacing:.6px; color:var(--muted); text-transform:uppercase; font-weight:700;}
 
   .goal-top{display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:12px;}
@@ -51,7 +52,7 @@
   .bar{height:14px; background:var(--card2); border-radius:10px; overflow:hidden; margin:6px 0 12px; position:relative;}
   .bar > div{height:100%; background:linear-gradient(90deg,var(--purple),var(--neon),var(--gold)); border-radius:10px; transition:width .7s cubic-bezier(.2,.8,.2,1); width:0; box-shadow:0 0 12px var(--neon);}
   .ticks{position:absolute; inset:0; display:flex; pointer-events:none;}
-  .ticks span{flex:1; border-right:1px dashed rgba(255,255,255,.18);}
+  .ticks span{flex:1; border-right:1px dashed rgba(0,0,0,.12);}
   .ticks span:last-child{border:none;}
   .goal-stats{display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-top:6px;}
   .stat{background:var(--card2); border-radius:12px; padding:10px; text-align:center;}
@@ -64,9 +65,9 @@
   .seg button.act-expense{background:var(--red); color:#3a0512; border-color:var(--red);}
   label{display:block; font-size:12px; color:var(--muted); margin:10px 0 5px; font-weight:600;}
   input,select{width:100%; padding:13px; border-radius:12px; border:1px solid var(--line); background:var(--card2); color:var(--text); font-size:16px; outline:none;}
-  input:focus,select:focus{border-color:var(--neon); box-shadow:0 0 0 3px rgba(217,70,239,.18);}
+  input:focus,select:focus{border-color:var(--neon); box-shadow:0 0 0 3px rgba(255,146,43,.2);}
   .row{display:grid; grid-template-columns:1fr 1fr; gap:10px;}
-  .add-btn{width:100%; margin-top:16px; padding:15px; border:none; border-radius:14px; background:linear-gradient(90deg,var(--purple),var(--neon)); color:#fff; font-size:16px; font-weight:800; cursor:pointer; box-shadow:0 6px 22px rgba(168,85,247,.5);}
+  .add-btn{width:100%; margin-top:16px; padding:15px; border:none; border-radius:14px; background:linear-gradient(90deg,var(--purple),var(--neon)); color:#fff; font-size:16px; font-weight:800; cursor:pointer; box-shadow:0 6px 20px rgba(255,107,107,.4);}
   .add-btn:active{transform:scale(.98);}
 
   .rec{display:flex; align-items:center; justify-content:space-between; padding:12px 0; border-bottom:1px solid var(--line);}
@@ -86,7 +87,7 @@
   .sum-name{flex:1;} .sum-val{width:90px; text-align:right;}
   .pos{color:var(--green);} .neg{color:var(--red);}
 
-  nav{position:fixed; bottom:0; left:0; right:0; background:rgba(20,12,48,.95); backdrop-filter:blur(12px); border-top:1px solid var(--line); display:flex; justify-content:space-around; padding:8px 0 max(8px,env(safe-area-inset-bottom));}
+  nav{position:fixed; bottom:0; left:0; right:0; background:rgba(255,248,243,.93); backdrop-filter:blur(12px); border-top:1px solid var(--line); display:flex; justify-content:space-around; padding:8px 0 max(8px,env(safe-area-inset-bottom));}
   nav button{background:none; border:none; color:var(--muted); font-size:11px; display:flex; flex-direction:column; align-items:center; gap:3px; cursor:pointer; padding:6px 14px; font-weight:600;}
   nav button .ic{font-size:20px;}
   nav button.active{color:var(--neon);}
@@ -100,9 +101,9 @@
   .date-head{font-size:13px; color:var(--muted); margin:0 0 8px; font-weight:600;}
 
   /* Celebration overlay */
-  #celebrate{position:fixed; inset:0; z-index:50; display:none; align-items:center; justify-content:center; background:rgba(13,6,32,.7); backdrop-filter:blur(4px);}
+  #celebrate{position:fixed; inset:0; z-index:50; display:none; align-items:center; justify-content:center; background:rgba(58,42,32,.45); backdrop-filter:blur(4px);}
   #celebrate.show{display:flex; animation:fade .3s;}
-  .cele-card{background:linear-gradient(160deg,var(--card2),var(--card)); border:1px solid var(--neon); border-radius:22px; padding:30px 34px; text-align:center; box-shadow:0 0 50px rgba(217,70,239,.6); max-width:300px;}
+  .cele-card{background:linear-gradient(160deg,var(--card2),var(--card)); border:1px solid var(--neon); border-radius:22px; padding:30px 34px; text-align:center; box-shadow:0 12px 50px rgba(255,107,107,.45); max-width:300px;}
   .cele-card .big{font-size:54px; margin-bottom:8px;}
   .cele-card .ttl{font-size:22px; font-weight:800; margin-bottom:6px;}
   .cele-card .sub{font-size:14px; color:var(--muted); margin-bottom:18px; line-height:1.6;}
@@ -367,7 +368,7 @@ function celebrate(m){
   confettiBurst();
 }
 function confettiBurst(){
-  const emojis=["🎉","✨","💜","🎊","⭐","💪","🥳"];
+  const emojis=["🎉","✨","🧡","🎊","⭐","💪","🥳"];
   for(let i=0;i<32;i++){
     const c=document.createElement("div"); c.className="confetti";
     c.textContent=emojis[i%emojis.length];
@@ -382,8 +383,8 @@ document.getElementById("celeClose").onclick=()=>document.getElementById("celebr
 
 /* ============ Render ============ */
 function renderGreet(){
-  document.getElementById("greetHi").textContent = greeting()+"，"+NAME+(lang==="zh"?" 🌙":" 🌙");
-  if(lang!=="zh") document.getElementById("greetHi").textContent = greeting()+", "+NAME+" 🌙";
+  document.getElementById("greetHi").textContent = greeting()+"，"+NAME+" ☀️";
+  if(lang!=="zh") document.getElementById("greetHi").textContent = greeting()+", "+NAME+" ☀️";
   document.getElementById("greetQuote").textContent = dailyQuote();
   document.getElementById("cdDays").textContent = daysLeft();
 }
