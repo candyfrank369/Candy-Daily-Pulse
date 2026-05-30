@@ -52,6 +52,20 @@ TEXT = {
         "income_word": "收入",
         "expense_word": "支出",
         "note_word": "备注",
+        "pick_business": "请选择业务:",
+        "business_prompt": "输入业务代号: ",
+        "bad_business": "无效的业务代号,请重新输入。",
+        "amount_prompt": "请输入金额 (AU$): ",
+        "bad_amount": "请输入数字!",
+        "amount_positive": "金额必须大于 0,请重新输入。",
+        "note_prompt": "备注 (可留空,直接回车): ",
+        "saved_income": "已记录一笔收入。",
+        "saved_expense": "已记录一笔支出。",
+        "summary_title": "\n===== 全部汇总(按业务) =====",
+        "total_income": "总收入",
+        "total_expense": "总支出",
+        "net": "净利",
+        "company_total": "公司合计",
     },
     "en": {
         "menu_title": "\n===== Daily Pulse - Main Menu =====",
@@ -69,6 +83,20 @@ TEXT = {
         "income_word": "Income",
         "expense_word": "Expense",
         "note_word": "Note",
+        "pick_business": "Choose a business:",
+        "business_prompt": "Enter business code: ",
+        "bad_business": "Invalid business code, please try again.",
+        "amount_prompt": "Enter amount (AU$): ",
+        "bad_amount": "Please enter a number!",
+        "amount_positive": "Amount must be greater than 0, please try again.",
+        "note_prompt": "Note (optional, press Enter to skip): ",
+        "saved_income": "Income record saved.",
+        "saved_expense": "Expense record saved.",
+        "summary_title": "\n===== Full Summary (by business) =====",
+        "total_income": "Total income",
+        "total_expense": "Total expense",
+        "net": "Net profit",
+        "company_total": "Company total",
     },
 }
 
@@ -149,6 +177,100 @@ def show_today(data, lang):
 
 
 # ----------------------------------------------------------------------
+# Feature: add a record (income or expense)
+# ----------------------------------------------------------------------
+
+def add_record(data, lang, kind):
+    """Ask the user for one income/expense record and append it to data.
+
+    'kind' is either "income" or "expense" (decided by the menu).
+    Demonstrates: dictionary (the record), try/except (amount input).
+    """
+    t = TEXT[lang]
+
+    # 1) Choose which business this record belongs to.
+    print(t["pick_business"])
+    for code in BUSINESSES:
+        print("  {} = {}".format(code, BUSINESSES[code][lang]))
+    while True:
+        business = input(t["business_prompt"]).strip()
+        if business in BUSINESSES:
+            break
+        print(t["bad_business"])
+
+    # 2) Ask for the amount. try/except catches non-numbers so we
+    #    never crash; the loop repeats until a valid positive number.
+    while True:
+        raw = input(t["amount_prompt"]).strip()
+        try:
+            amount = float(raw)
+        except ValueError:
+            print(t["bad_amount"])
+            continue
+        if amount <= 0:
+            print(t["amount_positive"])
+            continue
+        break
+
+    # 3) Optional note.
+    note = input(t["note_prompt"]).strip()
+
+    # 4) Build the record as a dictionary and store it.
+    record = {
+        "date": date.today().isoformat(),
+        "type": kind,
+        "business": business,
+        "amount": amount,
+        "note": note,
+    }
+    data.append(record)
+    save_data(data)
+
+    print(t["saved_income"] if kind == "income" else t["saved_expense"])
+
+
+# ----------------------------------------------------------------------
+# Feature: summary by business
+# ----------------------------------------------------------------------
+
+def show_summary(data, lang):
+    """Print total income, expense and net profit for each business."""
+    t = TEXT[lang]
+    print(t["summary_title"])
+
+    # Build a dictionary of running totals, one entry per business.
+    totals = {}
+    for code in BUSINESSES:
+        totals[code] = {"income": 0.0, "expense": 0.0}
+
+    # Loop over every record and add its amount to the right bucket.
+    for record in data:
+        code = record["business"]
+        totals[code][record["type"]] += record["amount"]
+
+    company_income = 0.0
+    company_expense = 0.0
+
+    # Print one block per business.
+    for code in BUSINESSES:
+        inc = totals[code]["income"]
+        exp = totals[code]["expense"]
+        net = inc - exp
+        company_income += inc
+        company_expense += exp
+        print("\n{}".format(BUSINESSES[code][lang]))
+        print("  {}: {:.2f}".format(t["total_income"], inc))
+        print("  {}: {:.2f}".format(t["total_expense"], exp))
+        print("  {}: {:.2f}".format(t["net"], net))
+
+    # Company-wide totals.
+    print("\n{}".format(t["company_total"]))
+    print("  {}: {:.2f}".format(t["total_income"], company_income))
+    print("  {}: {:.2f}".format(t["total_expense"], company_expense))
+    print("  {}: {:.2f}".format(t["net"], company_income - company_expense))
+
+
+# ----------------------------------------------------------------------
 # Main menu loop
 # ----------------------------------------------------------------------
 
@@ -171,8 +293,14 @@ def main():
         choice = input(t["choose"]).strip()
 
         # if / elif / else routes the user's choice to the right action.
-        if choice == "3":
+        if choice == "1":
+            add_record(data, lang, "income")
+        elif choice == "2":
+            add_record(data, lang, "expense")
+        elif choice == "3":
             show_today(data, lang)
+        elif choice == "4":
+            show_summary(data, lang)
         elif choice == "6":
             save_data(data)
             print(t["goodbye"])
