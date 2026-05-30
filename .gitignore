@@ -1,0 +1,5 @@
+# Python cache
+__pycache__/
+
+# Local data file (each user keeps their own records)
+data/pulse_data.json
