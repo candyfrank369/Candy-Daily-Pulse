@@ -152,6 +152,7 @@ def save_data(data):
     os.makedirs(os.path.dirname(DATA_FILE), exist_ok=True)
     with open(DATA_FILE, "w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, indent=2)
+        f.write("\n")   # end the file with a newline (avoids editor "no newline" warning)
 
 
 # ----------------------------------------------------------------------
