@@ -4,24 +4,24 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 <title>Candy Daily Pulse · 每日脉动</title>
-<meta name="theme-color" content="#ff6b6b" />
+<meta name="theme-color" content="#7c3aed" />
 <link rel="manifest" href="manifest.json" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 <meta name="apple-mobile-web-app-title" content="Daily Pulse" />
 <style>
   :root{
-    /* Sunrise Coral · 晨曦珊瑚 — bright, warm, hopeful */
-    --bg:#fff8f3; --bg2:#ffece0; --card:#ffffff; --card2:#fff2ea;
-    --purple:#ff6b6b; --purple-soft:#ff8787; --neon:#ff922b; --pink:#ff8fab;
-    --green:#12b886; --red:#fa5252; --text:#3a2a20; --muted:#9c8579;
-    --line:#ffe3d3; --gold:#f59f00;
+    /* Soft Lavender · 浅紫 — light, gentle purple gradient */
+    --bg:#faf8ff; --bg2:#f0eaff; --card:#ffffff; --card2:#f6f1ff;
+    --purple:#7c3aed; --purple-soft:#a78bfa; --neon:#b06cf5; --pink:#d8b4fe;
+    --green:#12b886; --red:#fa5252; --text:#3a2d59; --muted:#8a7fae;
+    --line:#ece4fb; --gold:#9333ea;
   }
   *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
   body{
     margin:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC","Microsoft YaHei",sans-serif;
-    background:radial-gradient(circle at 18% -10%,#ffd9c2 0%,transparent 55%),
-               radial-gradient(circle at 92% 0%,#ffd6e0 0%,transparent 48%),
+    background:radial-gradient(circle at 18% -10%,#e9defb 0%,transparent 55%),
+               radial-gradient(circle at 92% 0%,#f0e0fb 0%,transparent 48%),
                linear-gradient(165deg,var(--bg),var(--bg2));
     background-attachment:fixed; color:var(--text);
     min-height:100vh; padding-bottom:90px;
@@ -35,15 +35,15 @@
 
   /* Greeting */
   .greet{padding:6px 6px 14px;}
-  .greet .hi{font-size:23px; font-weight:800; background:linear-gradient(90deg,var(--purple-soft),var(--neon),var(--pink)); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;}
+  .greet .hi{font-size:23px; font-weight:800; background:linear-gradient(90deg,#7c3aed,#9333ea,#c026d3); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;}
   .greet .quote{font-size:13px; color:var(--muted); margin-top:5px; line-height:1.5;}
 
   /* Countdown banner */
-  .countdown{display:flex; align-items:center; justify-content:center; gap:10px; background:linear-gradient(90deg,rgba(255,107,107,.14),rgba(255,146,43,.16)); border:1px solid var(--line); border-radius:14px; padding:10px 14px; margin-bottom:16px; font-size:14px;}
+  .countdown{display:flex; align-items:center; justify-content:center; gap:10px; background:linear-gradient(90deg,rgba(124,58,237,.10),rgba(192,38,211,.10)); border:1px solid var(--line); border-radius:14px; padding:10px 14px; margin-bottom:16px; font-size:14px;}
   .countdown b{font-size:22px; color:var(--gold); font-weight:800; letter-spacing:.5px;}
   .countdown .fire{font-size:18px;}
 
-  .card{background:var(--card); border:1px solid var(--line); border-radius:18px; padding:18px; margin-bottom:16px; box-shadow:0 8px 28px rgba(255,138,76,.16);}
+  .card{background:var(--card); border:1px solid var(--line); border-radius:18px; padding:18px; margin-bottom:16px; box-shadow:0 8px 28px rgba(124,58,237,.12);}
   .card h2{margin:0 0 14px; font-size:14px; letter-spacing:.6px; color:var(--muted); text-transform:uppercase; font-weight:700;}
 
   .goal-top{display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:12px;}
@@ -65,9 +65,9 @@
   .seg button.act-expense{background:var(--red); color:#3a0512; border-color:var(--red);}
   label{display:block; font-size:12px; color:var(--muted); margin:10px 0 5px; font-weight:600;}
   input,select{width:100%; padding:13px; border-radius:12px; border:1px solid var(--line); background:var(--card2); color:var(--text); font-size:16px; outline:none;}
-  input:focus,select:focus{border-color:var(--neon); box-shadow:0 0 0 3px rgba(255,146,43,.2);}
+  input:focus,select:focus{border-color:var(--neon); box-shadow:0 0 0 3px rgba(176,108,245,.22);}
   .row{display:grid; grid-template-columns:1fr 1fr; gap:10px;}
-  .add-btn{width:100%; margin-top:16px; padding:15px; border:none; border-radius:14px; background:linear-gradient(90deg,var(--purple),var(--neon)); color:#fff; font-size:16px; font-weight:800; cursor:pointer; box-shadow:0 6px 20px rgba(255,107,107,.4);}
+  .add-btn{width:100%; margin-top:16px; padding:15px; border:none; border-radius:14px; background:linear-gradient(90deg,var(--purple),var(--neon)); color:#fff; font-size:16px; font-weight:800; cursor:pointer; box-shadow:0 6px 20px rgba(124,58,237,.35);}
   .add-btn:active{transform:scale(.98);}
 
   .rec{display:flex; align-items:center; justify-content:space-between; padding:12px 0; border-bottom:1px solid var(--line);}
@@ -87,10 +87,10 @@
   .sum-name{flex:1;} .sum-val{width:90px; text-align:right;}
   .pos{color:var(--green);} .neg{color:var(--red);}
 
-  nav{position:fixed; bottom:0; left:0; right:0; background:rgba(255,248,243,.93); backdrop-filter:blur(12px); border-top:1px solid var(--line); display:flex; justify-content:space-around; padding:8px 0 max(8px,env(safe-area-inset-bottom));}
+  nav{position:fixed; bottom:0; left:0; right:0; background:rgba(250,248,255,.93); backdrop-filter:blur(12px); border-top:1px solid var(--line); display:flex; justify-content:space-around; padding:8px 0 max(8px,env(safe-area-inset-bottom));}
   nav button{background:none; border:none; color:var(--muted); font-size:11px; display:flex; flex-direction:column; align-items:center; gap:3px; cursor:pointer; padding:6px 14px; font-weight:600;}
   nav button .ic{font-size:20px;}
-  nav button.active{color:var(--neon);}
+  nav button.active{color:var(--gold);}
 
   .view{display:none;} .view.active{display:block; animation:fade .3s;}
   @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
@@ -101,9 +101,9 @@
   .date-head{font-size:13px; color:var(--muted); margin:0 0 8px; font-weight:600;}
 
   /* Celebration overlay */
-  #celebrate{position:fixed; inset:0; z-index:50; display:none; align-items:center; justify-content:center; background:rgba(58,42,32,.45); backdrop-filter:blur(4px);}
+  #celebrate{position:fixed; inset:0; z-index:50; display:none; align-items:center; justify-content:center; background:rgba(45,32,68,.45); backdrop-filter:blur(4px);}
   #celebrate.show{display:flex; animation:fade .3s;}
-  .cele-card{background:linear-gradient(160deg,var(--card2),var(--card)); border:1px solid var(--neon); border-radius:22px; padding:30px 34px; text-align:center; box-shadow:0 12px 50px rgba(255,107,107,.45); max-width:300px;}
+  .cele-card{background:linear-gradient(160deg,var(--card2),var(--card)); border:1px solid var(--neon); border-radius:22px; padding:30px 34px; text-align:center; box-shadow:0 12px 50px rgba(124,58,237,.4); max-width:300px;}
   .cele-card .big{font-size:54px; margin-bottom:8px;}
   .cele-card .ttl{font-size:22px; font-weight:800; margin-bottom:6px;}
   .cele-card .sub{font-size:14px; color:var(--muted); margin-bottom:18px; line-height:1.6;}
@@ -368,7 +368,7 @@ function celebrate(m){
   confettiBurst();
 }
 function confettiBurst(){
-  const emojis=["🎉","✨","🧡","🎊","⭐","💪","🥳"];
+  const emojis=["🎉","✨","💜","🎊","⭐","💪","🥳"];
   for(let i=0;i<32;i++){
     const c=document.createElement("div"); c.className="confetti";
     c.textContent=emojis[i%emojis.length];
@@ -383,8 +383,8 @@ document.getElementById("celeClose").onclick=()=>document.getElementById("celebr
 
 /* ============ Render ============ */
 function renderGreet(){
-  document.getElementById("greetHi").textContent = greeting()+"，"+NAME+" ☀️";
-  if(lang!=="zh") document.getElementById("greetHi").textContent = greeting()+", "+NAME+" ☀️";
+  document.getElementById("greetHi").textContent = greeting()+"，"+NAME+" 💜";
+  if(lang!=="zh") document.getElementById("greetHi").textContent = greeting()+", "+NAME+" 💜";
   document.getElementById("greetQuote").textContent = dailyQuote();
   document.getElementById("cdDays").textContent = daysLeft();
 }
