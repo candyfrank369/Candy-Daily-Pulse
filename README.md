@@ -2,6 +2,24 @@
 
 A small command-line tool written in pure Python (standard library only), built for my own daily use — recording business income/expense and tracking my annual goal.
 
+## 🌐 Web App (use it on your phone or computer)
+
+The CLI tool is now also a personalized web app — open it anywhere, no install needed:
+
+### 👉 https://candyfrank369.github.io/Candy-Daily-Pulse/
+
+- **暗夜紫** neon theme, bilingual (中文 / English) one-tap toggle
+- Personalized greeting for **Candy** + a daily motivation line
+- 2026 year-end **countdown banner**, **logging streak 🔥**, and **milestone celebrations** at 25 / 50 / 75 / 100%
+- Same logic as the Python tool: 4 businesses, after-tax net = net × 0.75, AU$200,000 goal
+- Data stays in your own browser; export / import JSON (compatible with `pulse_data.json`)
+
+**Add to your home screen** to use it like a native app:
+- iPhone (Safari): Share → *Add to Home Screen*
+- Android (Chrome): ⋮ → *Install app*
+
+The web app lives in `index.html` (+ `manifest.json`, `sw.js`, `icon.svg`). The original Python CLI below is unchanged.
+
 ## 1. What this tool is
 
 Candy Daily Pulse is a **bilingual (中文 / English) command-line bookkeeping tool** for my company **CANDY & FRANK LTD**.
